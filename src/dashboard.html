@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
+    <script src="script.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Welcome to the Dashboard</h1>
+    <button onclick="downloadExcel()">Download as Excel</button><br></br>
+    <select id="filterDropdown" onchange="filterTable()">
+        <option value="">All</option>
+        <option value="Returned D">Returned D</option>
+        <option value="Goods Issu">Goods Issu</option>
+        <option value="Pending GI">Pending GI</option>
+    </select><br></br>
+    <label for="filterFromInput">From:</label>
+    <input type="number" id="filterFromInput">
+    <label for="filterToInput">To:</label>
+    <input type="number" id="filterToInput">
+    <button onclick="filterDelDate()">Filter</button><br></br>
+    <table id="data-table">
+        <tr>
+
+        </tr>
+    </table>
+    <button onclick="logout()">Logout</button>
+</body>
+</html>
