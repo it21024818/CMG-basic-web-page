@@ -32,6 +32,7 @@ function logout() {
 // Function to read data from a CSV file and populate the table
 window.onload = function () {
     if (window.location.pathname.includes("dashboard.html")) {
+        showProgressCircle();
         // Read the CSV file and process the data
 
         var xhr = new XMLHttpRequest();
@@ -41,6 +42,7 @@ window.onload = function () {
                 var data = xhr.responseText;
                 processData(data);
                 populateTable();
+                hideProgressCircle();
             }
         };
         xhr.send();
@@ -175,4 +177,16 @@ function isDateInRange(dateString, fromDate, toDate) {
     }
 
     return false;
+}
+
+// Function to show the progress circle
+function showProgressCircle() {
+    var progressCircle = document.getElementById("progress-circle");
+    progressCircle.style.display = "block";
+}
+
+// Function to hide the progress circle
+function hideProgressCircle() {
+    var progressCircle = document.getElementById("progress-circle");
+    progressCircle.style.display = "none";
 }
