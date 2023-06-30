@@ -55,15 +55,15 @@ function processData(csvData) {
     for (var i = 1; i < lines.length; i++) {
         var cells = lines[i].split(",");
         var rowData = {
-            salesOrg: cells[0],
-            deliveryDate: cells[1],
-            deliveryNo: cells[2],
-            deliverySatus: cells[4]
+            // salesOrg: cells[0],
+            // deliveryDate: cells[1],
+            // deliveryNo: cells[2],
+            // deliverySatus: cells[4]
         };
 
-        // for (var j = 0; j < headers.length; j++) {
-        //     rowData[headers[j]] = cells[j];
-        // }
+        for (var j = 0; j < headers.length; j++) {
+            rowData[headers[j]] = cells[j];
+        }
 
         tableData.push(rowData);
     }
@@ -97,7 +97,7 @@ function populateTable() {
 
 // Function to filter the table based on user input
 function filterTable() {
-    var filterInput = document.getElementById("filterInput");
+    var filterInput = document.getElementById("filterDropdown");
     var filterValue = filterInput.value.toUpperCase();
     var table = document.getElementById("data-table");
     var rows = table.getElementsByTagName("tr");
@@ -166,12 +166,12 @@ function filterDelDate() {
 
 // Function to check if a date is within the given range
 function isDateInRange(dateString, fromDate, toDate) {
-    var date = new Date(dateString);
-    var fromDateObj = new Date(fromDate);
-    var toDateObj = new Date(toDate);
+    // var date = new Date(dateString);
+    // var fromDateObj = new Date(fromDate);
+    // var toDateObj = new Date(toDate);
 
-    if (!isNaN(date) && !isNaN(fromDateObj) && !isNaN(toDateObj)) {
-        return date >= fromDateObj && date <= toDateObj;
+    if (!isNaN(dateString) && !isNaN(fromDate) && !isNaN(toDate)) {
+        return dateString >= fromDate && dateString <= toDate;
     }
 
     return false;
