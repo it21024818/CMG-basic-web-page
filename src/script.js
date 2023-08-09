@@ -119,12 +119,23 @@ function filterTable() {
 
 // Function to download the table data as an Excel sheet
 function downloadExcel() {
-    var headers = Object.keys(tableData[0]);
-    var workbook = XLSX.utils.book_new();
-    var worksheet = XLSX.utils.json_to_sheet(tableData, { header: headers });
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
-    var excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    saveExcelFile(excelBuffer, "data.xlsx");
+    var table = document.getElementById("data-table");
+    var filteredData = [];
+
+    for (var i = 1; i < table.rows.length; i++) {
+        if (table.rows[i].style.display !== "none") {
+            var rowData = [];
+            for (var j = 0; j < table.rows[i].cells.length; j++) {
+                rowData.push(table.rows[i].cells[j].innerText);
+            }
+            filteredData.push(rowData);
+        }
+    }
+
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.aoa_to_sheet([Array.from(table.rows[0].cells).map(cell => cell.innerText), ...filteredData]);
+    XLSX.utils.book_append_sheet(wb, ws, "Filtered Data");
+    XLSX.writeFile(wb, "data.xlsx");
 }
 
 // Function to save the Excel file
