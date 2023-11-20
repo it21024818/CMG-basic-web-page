@@ -76,6 +76,9 @@ function populateTable() {
     var table = document.getElementById("data-table");
     var headers = Object.keys(tableData[0]);
 
+    // Clear existing table content
+    table.innerHTML = "";
+
     // Create table header row
     var headerRow = document.createElement("tr");
     for (var i = 0; i < headers.length; i++) {
@@ -94,26 +97,6 @@ function populateTable() {
             row.appendChild(cell);
         }
         table.appendChild(row);
-    }
-}
-
-// Function to filter the table based on user input
-function filterTable() {
-    var filterInput = document.getElementById("filterDropdown");
-    var filterValue = filterInput.value.toUpperCase();
-    var table = document.getElementById("data-table");
-    var rows = table.getElementsByTagName("tr");
-
-    for (var i = 0; i < rows.length; i++) {
-        var searchCell = rows[i].getElementsByTagName("td")[4];
-        if (searchCell) {
-            var searchValue = searchCell.innerHTML.toUpperCase();
-            if (searchValue.indexOf(filterValue) > -1) {
-                rows[i].style.display = "";
-            } else {
-                rows[i].style.display = "none";
-            }
-        }
     }
 }
 
@@ -151,45 +134,6 @@ function saveExcelFile(buffer, filename) {
     URL.revokeObjectURL(url);
 }
 
-// Function to filter the table based on user input
-function filterDelDate() {
-    var filterFromInput = document.getElementById("filterFromInput");
-    var filterToInput = document.getElementById("filterToInput");
-    var filterFromValue = filterFromInput.value;
-    var filterToValue = filterToInput.value;
-
-    var table = document.getElementById("data-table");
-    var rows = table.getElementsByTagName("tr");
-
-    for (var i = 1; i < rows.length; i++) {
-        var cells = rows[i].getElementsByTagName("td");
-        var deliveryDateCell = cells[1];
-
-        if (deliveryDateCell) {
-            var deliveryDateValue = deliveryDateCell.innerHTML;
-
-            if (isDateInRange(deliveryDateValue, filterFromValue, filterToValue)) {
-                rows[i].style.display = "";
-            } else {
-                rows[i].style.display = "none";
-            }
-        }
-    }
-}
-
-// Function to check if a date is within the given range
-function isDateInRange(dateString, fromDate, toDate) {
-    // var date = new Date(dateString);
-    // var fromDateObj = new Date(fromDate);
-    // var toDateObj = new Date(toDate);
-
-    if (!isNaN(dateString) && !isNaN(fromDate) && !isNaN(toDate)) {
-        return dateString >= fromDate && dateString <= toDate;
-    }
-
-    return false;
-}
-
 // Function to show the progress circle
 function showProgressCircle() {
     var progressCircle = document.getElementById("progress-circle");
@@ -200,4 +144,50 @@ function showProgressCircle() {
 function hideProgressCircle() {
     var progressCircle = document.getElementById("progress-circle");
     progressCircle.style.display = "none";
+}
+
+// Function to filter the table based on user input after pressing the filter button
+function applyFilters() {
+    var filterInput = document.getElementById("filterDropdown");
+    var filterValue = filterInput.value.toUpperCase();
+    
+    var filterFromInput = document.getElementById("filterFromInput");
+    var filterToInput = document.getElementById("filterToInput");
+    var filterFromValue = filterFromInput.value;
+    var filterToValue = filterToInput.value;
+
+    var table = document.getElementById("data-table");
+    var rows = table.getElementsByTagName("tr");
+
+    for (var i = 0; i < rows.length; i++) {
+        var statusCell = rows[i].getElementsByTagName("td")[4];
+        var dateCell = rows[i].getElementsByTagName("td")[1];
+        
+        var statusValue = statusCell ? statusCell.innerHTML.toUpperCase() : "";
+        var dateValue = dateCell ? dateCell.innerHTML : "";
+
+        if (
+            (filterValue === "" || statusValue.indexOf(filterValue) > -1) &&
+            (filterFromValue === "" || filterToValue === "" || isDateInRange(dateValue, filterFromValue, filterToValue))
+        ) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+    // populateTable();
+}
+
+// Function to check if a date is within the given range
+function isDateInRange(dateString, fromDate, toDate) {
+
+    if (!isNaN(dateString) && !isNaN(fromDate) && !isNaN(toDate)) {
+        return dateString >= fromDate && dateString <= toDate;
+    } else if (!dateString) {
+        return true; // Display all dates if dateString is empty
+    } else if (!fromDate || !toDate) {
+        return true; // Display all dates if either fromDate or toDate is empty
+    }
+
+    return true;
 }

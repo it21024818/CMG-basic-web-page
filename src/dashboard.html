@@ -1,44 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        select, input[type="text"] {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        select {
+            width: 150px;
+        }
+
         table {
             border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
         }
 
         th, td {
-            border: 1px solid black;
-            padding: 8px;
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
         }
-    </style>
-    <script src="script.js"></script>
-    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-</head>
-<body>
-    <h1>Welcome to the Dashboard</h1>
-    <button onclick="downloadExcel()">Download as Excel</button><br></br>
-    <label>Delivery Status</label>
-    <select id="filterDropdown" onchange="filterTable()">
-        <option value="">All</option>
-        <option value="Returned D">Returned D</option>
-        <option value="Goods Issu">Goods Issu</option>
-        <option value="Pending GI">Pending GI</option>
-    </select><br></br>
-    <label for="filterFromInput">From:</label>
-    <input type="text" id="filterFromInput">
-    <label for="filterToInput">To:</label>
-    <input type="text" id="filterToInput">
-    <button onclick="filterDelDate()">Filter</button><br></br>
-    <div id="progress-circle" class="progress-circle"></div>
-    <table id="data-table">
-        <tr>
 
-        </tr>
-    </table>
-    <button onclick="logout()">Logout</button>
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
 
-    <style>
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
         .progress-circle {
             display: none;
             position: fixed;
@@ -69,5 +94,29 @@
             }
         }
     </style>
+    <script src="script.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Welcome to the Dashboard</h1>
+
+    <label>Delivery Status</label>
+    <select id="filterDropdown">
+        <option value="">All</option>
+        <option value="Returned D">Returned D</option>
+        <option value="Goods Issu">Goods Issu</option>
+        <option value="Pending GI">Pending GI</option>
+    </select><br><br>
+    <label for="filterFromInput">From:</label>
+    <input type="text" id="filterFromInput">
+    <label for="filterToInput">To:</label>
+    <input type="text" id="filterToInput">
+    <button id="filterButton" onclick="applyFilters()">Filter</button><br><br>
+    <button onclick="downloadExcel()">Download as Excel</button><br><br>
+    <div id="progress-circle" class="progress-circle"></div>
+    <table id="data-table">
+        <!-- Table content goes here -->
+    </table>
+    <button onclick="logout()">Logout</button>
 </body>
 </html>
