@@ -1,5 +1,6 @@
 var currentUser = null;
 var tableData = [];
+var currentUser = sessionStorage.getItem("currentUser");
 
 // Function to authenticate the user
 function login() {
@@ -8,44 +9,54 @@ function login() {
 
     if (username === "admin" && password === "password") {
         currentUser = username;
+        sessionStorage.setItem("currentUser", username);
         loadDashboard();
     } else {
         alert("Invalid username or password. Please try again.");
     }
-}
-
-// Function to load the dashboard page
+}// Function to load the dashboard page
 function loadDashboard() {
     if (currentUser !== null) {
         window.location.href = "dashboard.html";
+        
     } else {
         alert("Please login to access the dashboard.");
+        window.location.href = "index.html";
     }
 }
 
 // Function to logout the user
 function logout() {
     currentUser = null;
+    sessionStorage.removeItem("currentUser");
     window.location.href = "index.html";
 }
 
-// Function to read data from a CSV file and populate the table
+// Function to check authentication on page load
 window.onload = function () {
     if (window.location.pathname.includes("dashboard.html")) {
-        showProgressCircle();
-        // Read the CSV file and process the data
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "data.csv", true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var data = xhr.responseText;
-                processData(data);
-                populateTable();
-                hideProgressCircle();
-            }
-        };
-        xhr.send();
+        // Check sessionStorage for authentication
+        var storedUser = sessionStorage.getItem("currentUser");
+        
+        if (storedUser) {
+            currentUser = storedUser;
+            showProgressCircle();
+            // Read the CSV file and process the data
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "data.csv", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = xhr.responseText;
+                    processData(data);
+                    populateTable();
+                    hideProgressCircle();
+                }
+            };
+            xhr.send();
+        } else {
+            // User is not authenticated, redirect to login page
+            window.location.href = "index.html";
+        }
     }
 };
 
